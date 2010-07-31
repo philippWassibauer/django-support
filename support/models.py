@@ -24,7 +24,7 @@ class SupportQuestion(models.Model):
     category = models.ForeignKey(Category, name=_(u"Category"),
                                             null=True, blank=True)
     
-    email = models.EmailField(_(u"email"), max_length=180, null=true, blank=true)
+    email = models.EmailField(_(u"email"), blank=True)
     
     title = models.CharField(_(u"title"), max_length=180, 
                             null=True, blank=True)
