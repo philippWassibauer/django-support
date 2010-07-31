@@ -18,9 +18,8 @@ class Category(models.Model):
 
 
 class SupportQuestion(models.Model):
-    
     user = models.ForeignKey(User, verbose_name=_("user"),
-                             null=true, blank=true)
+                             null=True, blank=True)
     
     category = models.ForeignKey(Category, name=_(u"Category"),
                                             null=True, blank=True)
