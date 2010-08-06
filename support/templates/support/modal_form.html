@@ -1,0 +1,11 @@
+{% load uni_form %}
+{% load i18n %}
+<form class="standard-form" action="{% url contact_form %}" method="POST">
+    {{contact_form|as_uni_form}}
+    <div class="button-bar">
+        <div class="form_next">
+            <button type="submit">Speichern</button>
+        </div>
+    </div>
+    <div style="clear: both;"></div> 
+</form>
