@@ -10,7 +10,7 @@ setup(
     url='http://github.com/philippWassibauer/django-support',
     download_url='http://github.com/philippWassibauer/django-support/tarball/master',
     license='MIT',
-    version = "0.2",
+    version = "0.2.1",
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',

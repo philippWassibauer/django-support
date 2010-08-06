@@ -6,7 +6,7 @@ register = template.Library()
 
 def show_support_form():
     return {"contact_form": ContactForm()}
-register.inclusion_tag("support/contact_form.html")(show_contact_form)
+register.inclusion_tag("support/contact_form.html")(show_support_form)
 
 def show_support_tab():
     return {}
