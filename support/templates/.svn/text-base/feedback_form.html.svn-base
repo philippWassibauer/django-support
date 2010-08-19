@@ -1,8 +1,0 @@
-{% load uni_form %}
-<form class="basic_form" action="{% url contact_form %}" method="POST">
-    {{contact_form|as_uni_form}}
-    <div class="form_block">
-        <button type="submit">Speichern</button>
-        <button type="button" onclick="$('.feedback-panel').dialog('close')">Abbrechen</button>
-    </div>
-</form>
