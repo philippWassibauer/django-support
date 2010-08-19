@@ -29,8 +29,7 @@ class SupportQuestion(models.Model):
     title = models.CharField(_(u"title"), max_length=180, 
                             null=True, blank=True)
     
-    message = models.ImageField(upload_to="profile-images", 
-                              blank=True, null=True)
+    message = models.TextField(_(u"question"))
     
     submission_date = models.DateTimeField(_(u"submission date"))
     

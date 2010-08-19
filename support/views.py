@@ -20,12 +20,12 @@ def contact_form(request, form_class=ContactForm,
         success_url = reverse('contact_form_sent')
         
     if request.method == 'POST':
-        form = form_class(data=request.POST, files=request.FILES, request=request)
+        form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            form.save(fail_silently=fail_silently)
+            support_question = form.save(fail_silently=fail_silently)
             return HttpResponseRedirect(success_url)
     else:
-        form = form_class(request=request)
+        form = form_class()
 
     if extra_context is None:
         extra_context = {}

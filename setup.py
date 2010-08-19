@@ -3,14 +3,15 @@ from distutils.core import setup
 
 """ django-support instalation script """
 setup(
-    name = 'support',
+    name = 'django-support',
     description = 'generic support and ticket system',
     author = 'Philipp Wassibauer',
     author_email = 'phil@maptales.com',
+    packages=['support','support.templatetags'],
+    package_data={'support':['support/templates/support/*.html']},
     url='http://github.com/philippWassibauer/django-support',
-    download_url='http://github.com/philippWassibauer/django-support/tarball/master',
     license='MIT',
-    version = "0.2.1",
+    version = "0.2.2",
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',

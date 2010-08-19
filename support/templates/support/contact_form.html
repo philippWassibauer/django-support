@@ -1,6 +1,8 @@
-{% load uni_form %}
+
+{% load uni_form_tags %}
+
 {% load i18n %}
-<form class="standard-form" action="{% url contact_form %}" method="POST">
+<form class="standard-form" action="{% url support %}" method="POST">
     {{contact_form|as_uni_form}}
     <div class="button-bar">
         <div class="form_next">

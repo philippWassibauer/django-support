@@ -7,27 +7,27 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 
 from misc.utils import get_send_mail
 send_mail = get_send_mail()
-
+from models import SupportQuestion
 
 attrs_dict = { 'class': 'required' }
 
 
-class ContactForm(forms.Form):
-    def __init__(self, data=None, files=None, request=None, *args, **kwargs):
-        super(ContactForm, self).__init__(data=data, files=files, *args, **kwargs)
-
-    name = forms.CharField(max_length=100, widget=forms.TextInput(attrs=attrs_dict),label=_("Your name"))
-    email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=200)),label=_("Your email address"))
-    message = forms.CharField(widget=forms.Textarea(attrs=attrs_dict), label=_("Your message"))
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = SupportQuestion
+        exclude = ("user", "submission_date", "email")
     
     def save(self, fail_silently=False):
+        support_question = super(ContactForm, self).save()
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
         send_mail("Kontaktaufnahme von: %(name)s" % {'name': self.cleaned_data['name']},
                     self.cleaned_data['message'], 
                     self.cleaned_data['email'], 
                     self.recipient_list, 
                     fail_silently=True)
+        
+        return support_question
 
 
 class AkismetContactForm(ContactForm):
