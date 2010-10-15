@@ -9,20 +9,22 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from timezones.fields import TimeZoneField
-    
-class Category(models.Model):
-    name = models.CharField(_("name"), max_length=200)
-    
-    def __unicode__(self):
-        return self.name
+from datetime import datetime
+
+SUPPORT_CHOICES = (
+    ('feedback', _(u'Feedback')),
+    ('bug', _(u'Bug')),
+    ('feature', _(u'Feature')),
+    ('complaint', _(u'Complaint')),
+)
 
 
 class SupportQuestion(models.Model):
     user = models.ForeignKey(User, verbose_name=_("user"),
                              null=True, blank=True)
     
-    category = models.ForeignKey(Category, name=_(u"Category"),
-                                            null=True, blank=True)
+    category = models.CharField(_(u"Category"), max_length=180, 
+                            null=True, blank=True, choices=SUPPORT_CHOICES)
     
     email = models.EmailField(_(u"email"), blank=True)
     
@@ -31,7 +33,11 @@ class SupportQuestion(models.Model):
     
     message = models.TextField(_(u"question"))
     
-    submission_date = models.DateTimeField(_(u"submission date"))
+    submission_date = models.DateTimeField(_(u"submission date"), default=datetime.now)
+    
+    accepted_by = models.ForeignKey(User, verbose_name=_("user"),
+                             null=True, blank=True, related_name="accepted_tickets")
+    closed = models.BooleanField(_(u"closed"))
     
     class Meta:
         verbose_name = _("support question")

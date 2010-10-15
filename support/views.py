@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from forms import ContactForm
+from forms import ContactForm, AnonymousContactForm
 
 
 def contact_form(request, form_class=ContactForm,
@@ -16,13 +16,19 @@ def contact_form(request, form_class=ContactForm,
                  success_url=None, extra_context=None,
                  fail_silently=False):
     
+    if not request.user.is_authenticated():
+        form_class = AnonymousContactForm
+        
     if success_url is None:
         success_url = reverse('contact_form_sent')
         
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            support_question = form.save(fail_silently=fail_silently)
+            if request.user.is_authenticated():
+                support_question = form.save(request.user, fail_silently=fail_silently)
+            else:
+                support_question = form.save(fail_silently=fail_silently)
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()

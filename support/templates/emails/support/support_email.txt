@@ -1,0 +1,8 @@
+Es ist eine Support Anfrage abgegeben worden:
+
+Kategorie: {{support_question.get_category_display}}
+Frage: 
+{{support_question.message}}
+
+Um das Ticket anzunehmen und zu beantworten:
+{{ url }}

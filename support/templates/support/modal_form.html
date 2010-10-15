@@ -4,12 +4,11 @@
     <h3>{% trans "Hilfe und Support" %}</h3>
 </div>
 <div class="modal-body">
-    <form class="standard-form" action="{% url support %}" method="POST">
+    <form class="modal-form" action="{% url support %}" method="POST">
+        {% csrf_token %}
         {{contact_form|as_uni_form}}
         <div class="button-bar">
-            <div class="form_next">
-                <button type="submit">Speichern</button>
-            </div>
+            <button type="submit">{% trans "Speichern" %}</button>
         </div>
         <div style="clear: both;"></div> 
     </form>

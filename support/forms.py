@@ -4,6 +4,10 @@ from django.template import loader
 from django.template import RequestContext
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
+from django.contrib.auth.models import Permission, User, Group
 
 from misc.utils import get_send_mail
 send_mail = get_send_mail()
@@ -11,25 +15,64 @@ from models import SupportQuestion
 
 attrs_dict = { 'class': 'required' }
 
-
+def get_notification_users():
+    perm = Group.objects.get(name='moderator')
+    users = User.objects.filter(groups=perm)
+    return users
+    
 class ContactForm(forms.ModelForm):
+        
     class Meta:
         model = SupportQuestion
-        exclude = ("user", "submission_date", "email")
+        exclude = ("user", "submission_date", "email", "accepted_by", "closed")
     
-    def save(self, fail_silently=False):
+    def save(self, user, fail_silently=False):
         support_question = super(ContactForm, self).save()
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
-        send_mail("Kontaktaufnahme von: %(name)s" % {'name': self.cleaned_data['name']},
-                    self.cleaned_data['message'], 
-                    self.cleaned_data['email'], 
-                    self.recipient_list, 
+        from_email = user.email
+        recipient_list = [user.email for user in get_notification_users()]
+        url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
+        message = render_to_string("emails/support/support_email.txt",
+                                   { "user": user,
+                                     "url": url,
+                                     "support_question": support_question})
+        
+        send_mail("Kontaktaufnahme von: %(name)s" % {'name': str(user.get_profile())},
+                    message, 
+                    from_email, 
+                    recipient_list, 
                     fail_silently=True)
         
         return support_question
 
 
+class AnonymousContactForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(AnonymousContactForm, self).__init__(*args, **kwargs)
+        self.fields["email"].required = True
+        
+    class Meta:
+        model = SupportQuestion
+        exclude = ("user", "submission_date", "accepted_by", "closed")
+    
+    def save(self, fail_silently=False):
+        support_question = super(AnonymousContactForm, self).save()
+        from_email = self.cleaned_data['email']
+        recipient_list = [user.email for user in get_notification_users()]
+        url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
+        message = render_to_string("emails/support/support_email.txt",
+                                   { "user": user,
+                                     "url": url,
+                                     "support_question": support_question})
+        send_mail("Kontaktaufnahme von: %(name)s" % {'name': from_email},
+                    message, 
+                    from_email, 
+                    recipient_list, 
+                    fail_silently=True)
+        
+        return support_question
+    
+    
 class AkismetContactForm(ContactForm):
     def clean_body(self):
         if 'body' in self.cleaned_data and getattr(settings, 'AKISMET_API_KEY', ''):

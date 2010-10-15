@@ -1,5 +1,5 @@
-
 from distutils.core import setup
+import datetime
 
 """ django-support instalation script """
 setup(
@@ -11,7 +11,7 @@ setup(
     package_data={'support':['support/templates/support/*.html']},
     url='http://github.com/philippWassibauer/django-support',
     license='MIT',
-    version = "0.2.2",
+    version = datetime.datetime.strftime(datetime.datetime.now(), '%Y.%m.%d'),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
