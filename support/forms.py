@@ -61,8 +61,7 @@ class AnonymousContactForm(forms.ModelForm):
         recipient_list = [user.email for user in get_notification_users()]
         url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
         message = render_to_string("emails/support/support_email.txt",
-                                   { "user": user,
-                                     "url": url,
+                                   {"url": url,
                                      "support_question": support_question})
         send_mail("Kontaktaufnahme von: %(name)s" % {'name': from_email},
                     message, 
