@@ -33,7 +33,7 @@ class ContactForm(forms.ModelForm):
                                      "url": url,
                                      "support_question": support_question})
         
-        send_mail("Kontaktaufnahme von: %(name)s" % {'name': str(user.get_profile())},
+        send_mail("Kontaktaufnahme von: %(name)s" % {'name': str(user)},
                     message, 
                     from_email, 
                     recipient_list, 
