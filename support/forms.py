@@ -8,9 +8,6 @@ from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import Permission, User, Group
-
-from misc.utils import get_send_mail
-send_mail = get_send_mail()
 from models import SupportQuestion
 
 attrs_dict = { 'class': 'required' }
@@ -71,7 +68,7 @@ class AnonymousContactForm(forms.ModelForm):
         
         return support_question
     
-    
+
 class AkismetContactForm(ContactForm):
     def clean_body(self):
         if 'body' in self.cleaned_data and getattr(settings, 'AKISMET_API_KEY', ''):
@@ -87,3 +84,24 @@ class AkismetContactForm(ContactForm):
                 if akismet_api.comment_check(smart_str(self.cleaned_data['body']), data=akismet_data, build_data=True):
                     raise forms.ValidationError(u"Akismet thinks this message is spam")
         return self.cleaned_data['body']
+        
+        
+        
+
+def get_send_mail():
+    """
+    A function to return a send_mail function suitable for use in the app. It
+    deals with incompatibilities between signatures.
+    """
+    # favour django-mailer but fall back to django.core.mail
+    if "mailer" in settings.INSTALLED_APPS:
+        from mailer import send_mail
+    else:
+        from django.core.mail import send_mail as _send_mail
+        def send_mail(*args, **kwargs):
+            del kwargs["priority"]
+            return _send_mail(*args, **kwargs)
+    return send_mail
+
+send_mail = get_send_mail()
+
