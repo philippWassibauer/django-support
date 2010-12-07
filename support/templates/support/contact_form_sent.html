@@ -1,18 +1,14 @@
 {% extends "cms_3cols.html" %}
 {% load uni_form_tags %}
 
-{% block body_class %}default-body{% endblock %}
-
 {% block body %}
-    <div style="width: 430px; margin: 0 auto; position: relative;">
-        <h3>{% trans "Success" %}</h3>
-        <p>
-        {% blocktrans %}
-        Your Support Ticket has been submitted. We will get back to you soon.
-        
-        Thanks,
-        The Zweitwelt Team
-        {% endblocktrans %}
-        </p>
-    </div>
+<h3>{% trans "Success" %}</h3>
+<p>
+{% blocktrans %}
+Your Support Ticket has been submitted. We will get back to you soon.
+
+Thanks,
+The Zweitwelt Team
+{% endblocktrans %}
+</p>
 {% endblock %}

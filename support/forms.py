@@ -53,7 +53,10 @@ class AnonymousContactForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AnonymousContactForm, self).__init__(*args, **kwargs)
         self.fields["email"].required = True
-        
+        if hasattr(settings, "SHOW_SUPPORT_CHOICES") \
+           and settings.SHOW_SUPPORT_CHOICES == False:
+            del self.fields['category']
+            
     class Meta:
         model = SupportQuestion
         exclude = ("user", "submission_date", "accepted_by", "closed")
