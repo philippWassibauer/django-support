@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import Permission, User, Group
 from models import SupportQuestion
+from django.conf import settings
 
 attrs_dict = { 'class': 'required' }
 
@@ -18,6 +19,11 @@ def get_notification_users():
     return users
     
 class ContactForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        if hasattr(settings, "SHOW_SUPPORT_CHOICES") \
+           and settings.SHOW_SUPPORT_CHOICES == False:
+            del self.fields['category']
         
     class Meta:
         model = SupportQuestion
