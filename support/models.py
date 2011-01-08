@@ -24,22 +24,22 @@ class SupportQuestion(models.Model):
     category = models.CharField(_(u"Category"), max_length=180, 
                             null=True, blank=True, choices=SUPPORT_CHOICES)
     
-    email = models.EmailField(_(u"email"), blank=True)
+    email = models.EmailField(_(u"Email"), blank=True)
     
-    title = models.CharField(_(u"title"), max_length=180, 
+    title = models.CharField(_(u"Title"), max_length=180, 
                             null=True, blank=True)
     
-    message = models.TextField(_(u"question"))
+    message = models.TextField(_(u"Question"))
     
-    submission_date = models.DateTimeField(_(u"submission date"), default=datetime.now)
+    submission_date = models.DateTimeField(_(u"Submission date"), default=datetime.now)
     
-    accepted_by = models.ForeignKey(User, verbose_name=_("user"),
+    accepted_by = models.ForeignKey(User, verbose_name=_("User"),
                              null=True, blank=True, related_name="accepted_tickets")
-    closed = models.BooleanField(_(u"closed"))
+    closed = models.BooleanField(_(u"Closed"))
     
     class Meta:
-        verbose_name = _("support question")
-        verbose_name_plural = _("support question")
+        verbose_name = _("Support question")
+        verbose_name_plural = _("Support question")
     
     def __unicode__(self):
         return ""

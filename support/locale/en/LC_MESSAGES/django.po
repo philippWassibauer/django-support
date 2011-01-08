@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-08 14:38+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: models.py:13
+msgid "Feedback"
+msgstr ""
+
+#: models.py:14
+msgid "Bug"
+msgstr ""
+
+#: models.py:15
+msgid "Feature"
+msgstr ""
+
+#: models.py:16
+msgid "Complaint"
+msgstr ""
+
+#: models.py:21
+msgid "user"
+msgstr ""
+
+#: models.py:24
+msgid "Category"
+msgstr ""
+
+#: models.py:27
+msgid "Email"
+msgstr ""
+
+#: models.py:29
+msgid "Title"
+msgstr ""
+
+#: models.py:32
+msgid "Question"
+msgstr ""
+
+#: models.py:34
+msgid "Submission date"
+msgstr ""
+
+#: models.py:36
+msgid "User"
+msgstr ""
+
+#: models.py:38
+msgid "Closed"
+msgstr ""
+
+#: models.py:41 models.py:42
+msgid "Support question"
+msgstr ""
+
+#: templates/support/contact_form_sent.html:5
+msgid "Success"
+msgstr ""
+
+#: templates/support/contact_form_sent.html:7
+msgid ""
+"\n"
+"Your Support Ticket has been submitted. We will get back to you soon.\n"
+"\n"
+"Thanks,\n"
+"The Zweitwelt Team\n"
+msgstr ""
+
+#: templates/support/modal_form.html:4
+msgid "Contact"
+msgstr ""
+
+#: templates/support/modal_form.html:11
+msgid "Speichern"
+msgstr ""
