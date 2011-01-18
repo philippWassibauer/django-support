@@ -28,7 +28,12 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = SupportQuestion
         exclude = ("user", "submission_date", "email", "accepted_by", "closed")
-    
+        widgets = {
+            'user_agent': forms.HiddenInput(),
+            'submission_url': forms.HiddenInput(),
+            'previous_url': forms.HiddenInput(),
+        }
+        
     def save(self, user, fail_silently=False):
         support_question = super(ContactForm, self).save()
         from_email = user.email
@@ -57,10 +62,16 @@ class AnonymousContactForm(forms.ModelForm):
            and settings.SHOW_SUPPORT_CHOICES == False:
             del self.fields['category']
             
+          
     class Meta:
         model = SupportQuestion
         exclude = ("user", "submission_date", "accepted_by", "closed")
-    
+        widgets = {
+            'user_agent': forms.HiddenInput(),
+            'submission_url': forms.HiddenInput(),
+            'previous_url': forms.HiddenInput(),
+        }
+        
     def save(self, fail_silently=False):
         support_question = super(AnonymousContactForm, self).save()
         from_email = self.cleaned_data['email']

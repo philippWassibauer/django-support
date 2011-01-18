@@ -37,9 +37,15 @@ class SupportQuestion(models.Model):
                              null=True, blank=True, related_name="accepted_tickets")
     closed = models.BooleanField(_(u"Closed"))
     
+    # Metadata
+    user_agent = models.CharField(max_length=380, null=True, blank=True)
+    submission_url = models.CharField(max_length=280, null=True, blank=True)
+    previous_url = models.CharField(max_length=280, null=True, blank=True)
+    
     class Meta:
         verbose_name = _("Support question")
         verbose_name_plural = _("Support question")
-    
+        ordering = ("submission_date",)
+        
     def __unicode__(self):
-        return ""
+        return "%s > %s (%s)"%(self.user, self.title, self.get_category_display())

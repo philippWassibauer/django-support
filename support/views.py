@@ -9,8 +9,36 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from forms import ContactForm, AnonymousContactForm
+from models import SupportQuestion
 
-
+def contact_form_moderate(request, template_name="support/moderate.html"):
+    open_tickets = SupportQuestion.objects.filter(closed=False)
+    unaccepted_tickets = SupportQuestion.objects.filter(accepted_by__isnull=True)
+    tickets = SupportQuestion.objects.filter(accepted_by__isnull=False, closed=True)
+    your_tickets = SupportQuestion.objects.filter(accepted_by=request.user)
+    return render_to_response(template_name,
+                              {
+                                "open_tickets": open_tickets,
+                                "unaccepted_tickets": unaccepted_tickets,
+                                "tickets": tickets,
+                                "your_tickets": your_tickets,
+                              },
+                              context_instance=RequestContext(request))
+    
+    
+def ticket_view(request, template_name="support/ticket.html"):
+    ticket = SupportQuestion.objects.get(pk=id)
+    return render_to_response(template_name,
+                              { 'ticket': ticket },
+                              context_instance=RequestContext(request))
+    
+    
+def reply_to_ticket(request, id):
+    ticket = SupportQuestion.objects.get(pk=id)
+    return render_to_response(template_name,
+                              { 'ticket': ticket },
+                              context_instance=RequestContext(request))
+    
 def contact_form(request, form_class=ContactForm,
                  template_name='support/contact_form.html',
                  success_url=None, extra_context=None,
@@ -31,7 +59,8 @@ def contact_form(request, form_class=ContactForm,
                 support_question = form.save(fail_silently=fail_silently)
             return HttpResponseRedirect(success_url)
     else:
-        form = form_class()
+        form = form_class(initial=request.GET)
+        
 
     if extra_context is None:
         extra_context = {}
