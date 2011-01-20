@@ -49,3 +49,14 @@ class SupportQuestion(models.Model):
         
     def __unicode__(self):
         return "%s > %s (%s)"%(self.user, self.title, self.get_category_display())
+
+
+class SupportReply(models.Model):
+    support_question = models.ForeignKey(SupportQuestion, related_name="replies")
+    user = models.ForeignKey(User, verbose_name=_("user"),
+                             null=True, blank=True)
+    message = models.TextField(_(u"Question"))
+    submission_date = models.DateTimeField(_(u"Submission date"), editable=False,
+                                           default=datetime.now)
+    
+    

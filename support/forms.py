@@ -36,6 +36,7 @@ class ContactForm(forms.ModelForm):
         
     def save(self, user, fail_silently=False):
         support_question = super(ContactForm, self).save()
+        support_question.user = user
         from_email = user.email
         recipient_list = [user.email for user in get_notification_users()]
         url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
@@ -49,6 +50,8 @@ class ContactForm(forms.ModelForm):
                     from_email, 
                     recipient_list, 
                     fail_silently=True)
+        
+        support_question.save()
         
         return support_question
 

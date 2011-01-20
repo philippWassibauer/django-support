@@ -6,7 +6,6 @@
 <div class="modal-body">
     <form class="modal-form" action="{% url support %}" method="POST">
         {% csrf_token %}
-        {{ user_agent }}
         {{contact_form|as_uni_form}}
         <div class="button-bar">
             <button type="submit">{% trans "Speichern" %}</button>

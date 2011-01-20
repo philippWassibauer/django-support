@@ -1,2 +1,2 @@
-<a href="{% url modular_feedback %}?user_agent={{ user_agent }}&submission_url={{submission_url}}&previous_url={{previous_url}}"
+<a href="{% url modular_feedback %}?user_agent={{ user_agent|urlencode }}&submission_url={{submission_url|urlencode}}&previous_url={{previous_url|urlencode}}"
    rel="facebox" class="feedback-tab"></a>

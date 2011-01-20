@@ -14,7 +14,7 @@ from models import SupportQuestion
 def contact_form_moderate(request, template_name="support/moderate.html"):
     open_tickets = SupportQuestion.objects.filter(closed=False)
     unaccepted_tickets = SupportQuestion.objects.filter(accepted_by__isnull=True)
-    tickets = SupportQuestion.objects.filter(accepted_by__isnull=False, closed=True)
+    tickets = SupportQuestion.objects.all()
     your_tickets = SupportQuestion.objects.filter(accepted_by=request.user)
     return render_to_response(template_name,
                               {
@@ -33,8 +33,35 @@ def ticket_view(request, template_name="support/ticket.html"):
                               context_instance=RequestContext(request))
     
     
-def reply_to_ticket(request, id):
+def edit_ticket(request, id):
     ticket = SupportQuestion.objects.get(pk=id)
+    if request.POST:
+        # check if it is assigned
+        if request.POST.get("action")=="assign":
+            ticket.accepted_by = User.objects.get(pk=request.POST.get("assign-to"))
+            
+        # check if it is closed or reopened
+        if request.POST.get("action")=="close":
+            ticket.closed = True
+        
+        if request.POST.get("action")=="open":
+            ticket.closed = False
+        
+        # check for reply
+        if request.POST.get("action")=="reply":
+            message = request.POST.get("message")
+            reply = SupportReply(message=message, user=request.user,
+                         support_question=ticket)
+            reply.save()
+            from misc.html_email import send_html_email
+            email = ticket.email
+            if ticket.user:
+                email = ticket.user.email
+            send_html_email([email], "emails/support_ticket_reply", {"ticket": ticket,
+                                                                     "reply":reply})
+            
+        # save
+        ticket.save()
     return render_to_response(template_name,
                               { 'ticket': ticket },
                               context_instance=RequestContext(request))

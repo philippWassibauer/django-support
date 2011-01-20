@@ -1,0 +1,24 @@
+{% extends "cms_3cols.html" %}
+{% load uni_form_tags %}
+{% block body %}
+<h3>{% trans "Success" %}</h3>
+<p>
+    <div class="tab">
+        {% for open_ticket in open_tickets %}
+            {{ open_ticket }}
+        {% endfor %}
+        
+        {% for unaccepted_ticket in unaccepted_tickets %}
+            {{ unaccepted_ticket }}
+        {% endfor %}
+        
+        {% for your_ticket in your_tickets %}
+            {{ your_ticket }}
+        {% endfor %}
+        
+        {% for ticket in tickets %}
+            {{ ticket }}
+        {% endfor %}
+    </div>
+</p>
+{% endblock %}
