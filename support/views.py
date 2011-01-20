@@ -2,14 +2,16 @@
 View which can render and send email from a contact form.
 
 """
-
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
+from django.contrib import messages
 from forms import ContactForm, AnonymousContactForm
-from models import SupportQuestion
+from models import SupportQuestion, SupportReply
+from django.contrib.auth.models import User
+from misc.html_email import send_html_email
 
 def contact_form_moderate(request, template_name="support/moderate.html"):
     open_tickets = SupportQuestion.objects.filter(closed=False)
@@ -25,27 +27,30 @@ def contact_form_moderate(request, template_name="support/moderate.html"):
                               },
                               context_instance=RequestContext(request))
     
-    
-def ticket_view(request, template_name="support/ticket.html"):
+   
+def view_ticket(request, id, template_name="support/ticket.html"):
     ticket = SupportQuestion.objects.get(pk=id)
     return render_to_response(template_name,
                               { 'ticket': ticket },
                               context_instance=RequestContext(request))
     
-    
-def edit_ticket(request, id):
+def edit_ticket(request, id,  template_name=""):
     ticket = SupportQuestion.objects.get(pk=id)
     if request.POST:
         # check if it is assigned
         if request.POST.get("action")=="assign":
             ticket.accepted_by = User.objects.get(pk=request.POST.get("assign-to"))
+            send_html_email([ticket.accepted_by.email], "emails/support_ticket_assigned", {"ticket": ticket})
+            messages.success(request, _("Ticket has been assigned"))
             
         # check if it is closed or reopened
         if request.POST.get("action")=="close":
             ticket.closed = True
+            messages.success(request, _("Ticket was closed"))
         
         if request.POST.get("action")=="open":
             ticket.closed = False
+            messages.success(request, _("Ticket was reopened"))
         
         # check for reply
         if request.POST.get("action")=="reply":
@@ -53,15 +58,18 @@ def edit_ticket(request, id):
             reply = SupportReply(message=message, user=request.user,
                          support_question=ticket)
             reply.save()
-            from misc.html_email import send_html_email
+            
             email = ticket.email
             if ticket.user:
                 email = ticket.user.email
             send_html_email([email], "emails/support_ticket_reply", {"ticket": ticket,
                                                                      "reply":reply})
+            messages.success(request, _("Ticket reply has been sent"))
             
         # save
         ticket.save()
+        return HttpResponseRedirect(reverse('support_view_ticket', args=(ticket.pk,)))
+        
     return render_to_response(template_name,
                               { 'ticket': ticket },
                               context_instance=RequestContext(request))

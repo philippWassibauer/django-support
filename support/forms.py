@@ -13,7 +13,7 @@ from django.conf import settings
 
 attrs_dict = { 'class': 'required' }
 
-def get_notification_users():
+def get_support_moderators():
     perm = Group.objects.get(name='moderator')
     users = User.objects.filter(groups=perm)
     return users
@@ -38,7 +38,7 @@ class ContactForm(forms.ModelForm):
         support_question = super(ContactForm, self).save()
         support_question.user = user
         from_email = user.email
-        recipient_list = [user.email for user in get_notification_users()]
+        recipient_list = [user.email for user in get_support_moderators()]
         url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
         message = render_to_string("emails/support/support_email.txt",
                                    { "user": user,
@@ -78,7 +78,7 @@ class AnonymousContactForm(forms.ModelForm):
     def save(self, fail_silently=False):
         support_question = super(AnonymousContactForm, self).save()
         from_email = self.cleaned_data['email']
-        recipient_list = [user.email for user in get_notification_users()]
+        recipient_list = [user.email for user in get_support_moderators()]
         url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
         message = render_to_string("emails/support/support_email.txt",
                                    {"url": url,

@@ -1,12 +1,21 @@
 from django import template
 from support.forms import ContactForm
+from support.forms import get_support_moderators as _get_support_moderators
 
 register = template.Library()
-
 
 def show_support_form():
     return {"contact_form": ContactForm()}
 register.inclusion_tag("support/contact_form.html")(show_support_form)
+
+def get_support_moderators():
+    return _get_support_moderators()
+register.simple_tag(get_support_moderators)
+
+def select_support_moderators(ticket):
+    return {"moderators": _get_support_moderators(),
+            "ticket":ticket}
+register.inclusion_tag("support/moderator_select.html")(select_support_moderators)
 
 def show_support_tab(context):
     previous_url = ""

@@ -1,0 +1,6 @@
+<select id="assigned-to-{{ ticket.pk }}" name="assign-to">
+    <option value="-1">----</option>
+    {% for moderator in moderators %}
+        <option value="{{ moderator.pk }}" {% if moderator == ticket.accepted_by %}selected{% endif %}>{{ moderator.get_profile }}</option>
+    {% endfor %}
+</select>

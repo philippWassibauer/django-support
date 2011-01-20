@@ -1,0 +1,43 @@
+{% extends "cms_3cols.html" %}
+{% load uni_form_tags %}
+{% block body %}
+    <li class="ticket">
+        <h3>{{ ticket.title }} - ({{ ticket.get_category_display }})</h3>
+        <p>{{ ticket.message }}</p>
+        
+        <div class="reply">
+            <h3>{% trans "Reply" %}</h3>
+            <form class="uniForm">
+                <div class="action-panel">
+                    <div class="assign-ticket ticket-action">
+                        {% trans "Assign Ticket" %}: <button type="submit" class="pink-button">{% trans "Assign" %}</button>
+                    </div>
+                    <div class="close-ticket ticket-action">
+                        {% trans "Close Ticket" %}: <button type="submit" class="pink-button">{% trans "Close" %}</button>
+                    </div>
+                </div>
+                <textarea></textarea>
+                <div class="form_block">
+                    <button type="submit" class="pink-button">{% trans "Reply" %}</button>
+                </div>
+            </form>
+        </div>
+        <div class="ticket-metadata">
+            <div class="metadata-row">
+                {% trans "On" %} {{ ticket.submission_date }} {% trans "by" %}
+                {% if ticket.user %}<a href="{{ ticket.user.get_absolute_url }}">{{ ticket.user }}</a>{% else %}{{ ticket.email }}{% endif %} 
+            </div>
+            <div class="metadata-row">
+                {% trans "Browser" %}: {{ ticket.user_agent }}
+            </div>
+            <div class="metadata-row">
+                {% trans "Location" %}: {{ ticket.submission_url }}
+            </div>
+            {% if ticket.previous_url %}
+                <div class="metadata-row">
+                    {% trans "Previous Location" %}: {{ ticket.previous_url }}
+                </div>
+            {% endif %}
+        </div>
+    </li>
+{% endblock %}
