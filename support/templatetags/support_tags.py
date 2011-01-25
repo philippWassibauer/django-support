@@ -20,6 +20,7 @@ register.inclusion_tag("support/moderator_select.html")(select_support_moderator
 def show_support_tab(context):
     previous_url = ""
     user_agent = ""
+    path = ""
     try:
         previous_url = context['request'].META['HTTP_REFERER']
     except:
@@ -30,7 +31,12 @@ def show_support_tab(context):
     except:
         pass
     
-    return {"submission_url": context['request'].path,
+    try:
+        path = context['request'].path
+    except:
+        pass
+    
+    return {"submission_url": path,
             "previous_url":  previous_url,
             "user_agent": user_agent}
 register.inclusion_tag("support/feedback_tab.html", takes_context=True)(show_support_tab)
