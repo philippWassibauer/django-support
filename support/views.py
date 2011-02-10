@@ -11,7 +11,7 @@ from django.contrib import messages
 from forms import ContactForm, AnonymousContactForm
 from models import SupportQuestion, SupportReply
 from django.contrib.auth.models import User
-from templated_emails.utils import send_html_email
+from templated_emails.utils import send_templated_email
 
 def contact_form_moderate(request, template_name="support/moderate.html"):
     open_tickets = SupportQuestion.objects.filter(closed=False)
@@ -40,7 +40,7 @@ def edit_ticket(request, id,  template_name=""):
         # check if it is assigned
         if request.POST.get("action")=="assign":
             ticket.accepted_by = User.objects.get(pk=request.POST.get("assign-to"))
-            send_html_email([ticket.accepted_by.email], "emails/support_ticket_assigned", {"ticket": ticket})
+            send_templated_email([ticket.accepted_by.email], "emails/support_ticket_assigned", {"ticket": ticket})
             messages.success(request, _("Ticket has been assigned"))
             
         # check if it is closed or reopened
@@ -62,7 +62,7 @@ def edit_ticket(request, id,  template_name=""):
             email = ticket.email
             if ticket.user:
                 email = ticket.user.email
-            send_html_email([email], "emails/support_ticket_reply", {"ticket": ticket,
+            send_templated_email([email], "emails/support_ticket_reply", {"ticket": ticket,
                                                                      "reply":reply})
             messages.success(request, _("Ticket reply has been sent"))
             
