@@ -17,7 +17,8 @@ def select_support_moderators(ticket):
             "ticket":ticket}
 register.inclusion_tag("support/moderator_select.html")(select_support_moderators)
 
-def show_support_tab(context):
+
+def get_support_context(context):
     previous_url = ""
     user_agent = ""
     path = ""
@@ -39,4 +40,13 @@ def show_support_tab(context):
     return {"submission_url": path,
             "previous_url":  previous_url,
             "user_agent": user_agent}
+    
+    
+def show_support_tab(context):
+    return get_support_context(context)
 register.inclusion_tag("support/feedback_tab.html", takes_context=True)(show_support_tab)
+
+   
+def show_support_button(context):
+    return get_support_context(context)
+register.inclusion_tag("support/feedback_button.html", takes_context=True)(show_support_tab)
