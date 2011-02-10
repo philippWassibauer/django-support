@@ -1,0 +1,12 @@
+A simple app for adding anonymous and signed in feedback to a site.
+
+Features:
+* Using the templatetag the feedback tab can be added to the side of any page.
+* If clicked a modular overlay (Facebox) is opened displaying the feedback
+* The referring url, current url and user agent are also stored with the feedback.
+* Feedback can be categorized
+* There is a very simple backend. Moderators can close, open and assign tickets.
+
+Dependencies:
+Facebox (http://chriswanstrath.com/facebox/)
+Templated-Emails (https://github.com/philippWassibauer/templated-emails)
