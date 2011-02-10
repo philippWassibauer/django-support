@@ -49,4 +49,4 @@ register.inclusion_tag("support/feedback_tab.html", takes_context=True)(show_sup
    
 def show_support_button(context):
     return get_support_context(context)
-register.inclusion_tag("support/feedback_button.html", takes_context=True)(show_support_tab)
+register.inclusion_tag("support/feedback_button.html", takes_context=True)(show_support_button)
