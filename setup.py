@@ -9,6 +9,9 @@ setup(
     author_email = 'phil@maptales.com',
     packages=['support','support.templatetags'],
     package_data={'support':['support/templates/support/*.html']},
+    dependency_links = [
+        'git://github.com/philippWassibauer/templated-emails.git#egg=templated-emails',
+    ],
     url='http://github.com/philippWassibauer/django-support',
     license='MIT',
     version = datetime.datetime.strftime(datetime.datetime.now(), '%Y.%m.%d'),

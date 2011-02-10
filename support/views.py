@@ -11,7 +11,7 @@ from django.contrib import messages
 from forms import ContactForm, AnonymousContactForm
 from models import SupportQuestion, SupportReply
 from django.contrib.auth.models import User
-from misc.html_email import send_html_email
+from templated_emails.utils import send_html_email
 
 def contact_form_moderate(request, template_name="support/moderate.html"):
     open_tickets = SupportQuestion.objects.filter(closed=False)
