@@ -12,7 +12,10 @@ from forms import ContactForm, AnonymousContactForm
 from models import SupportQuestion, SupportReply
 from django.contrib.auth.models import User
 from templated_emails.utils import send_templated_email
+from django.contrib.auth.decorators import login_required
 
+
+@login_required
 def contact_form_moderate(request, template_name="support/moderate.html"):
     open_tickets = SupportQuestion.objects.filter(closed=False)
     unaccepted_tickets = SupportQuestion.objects.filter(accepted_by__isnull=True)
@@ -27,13 +30,16 @@ def contact_form_moderate(request, template_name="support/moderate.html"):
                               },
                               context_instance=RequestContext(request))
     
-   
+    
+@login_required
 def view_ticket(request, id, template_name="support/ticket.html"):
     ticket = SupportQuestion.objects.get(pk=id)
     return render_to_response(template_name,
                               { 'ticket': ticket },
                               context_instance=RequestContext(request))
-    
+
+
+@login_required
 def edit_ticket(request, id,  template_name=""):
     ticket = SupportQuestion.objects.get(pk=id)
     if request.POST:
@@ -73,6 +79,7 @@ def edit_ticket(request, id,  template_name=""):
     return render_to_response(template_name,
                               { 'ticket': ticket },
                               context_instance=RequestContext(request))
+    
     
 def contact_form(request, form_class=ContactForm,
                  template_name='support/contact_form.html',
