@@ -9,12 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from datetime import datetime
 
-SUPPORT_CHOICES = (
+SUPPORT_CHOICES = getattr(settings, "SUPPORT_CHOICES", (
     ('feedback', _(u'Feedback')),
     ('bug', _(u'Bug')),
     ('feature', _(u'Feature')),
     ('complaint', _(u'Complaint')),
-)
+))
 
 
 class SupportQuestion(models.Model):
