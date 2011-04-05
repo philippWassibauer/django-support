@@ -38,7 +38,7 @@ class ContactForm(forms.ModelForm):
         support_question = super(ContactForm, self).save()
         support_question.user = user
         from_email = user.email
-        recipient_list = [user.email for user in get_support_moderators()]
+        recipient_list = [moderator.email for moderator in get_support_moderators()]
         url = "http://%s%s"%(Site.objects.get_current(), reverse("support_moderation"))
         message = render_to_string("emails/support/support_email.txt",
                                    { "user": user,
